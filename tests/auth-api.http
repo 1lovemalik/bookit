@@ -1,0 +1,58 @@
+GET http://localhost:5000/api/auth/test
+###
+
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+
+###
+
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securepassword"
+}
+
+###
+
+GET http://localhost:5000/api/posts/test
+###
+
+POST http://localhost:5000/api/posts
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+{
+  "title": "Sample Post Title",
+  "description": "This is a sample post description."
+}
+
+###
+
+GET http://localhost:5000/api/posts
+###
+
+POST http://localhost:5000/api/posts/<post-id>/like
+Authorization: Bearer <your-jwt-token>
+
+###
+
+POST http://localhost:5000/api/posts/<post-id>/comment
+Content-Type: application/json
+Authorization: Bearer <your-jwt-token>
+
+{
+  "body": "This is a comment on the post."
+}
+
+###
+
+GET http://localhost:5000/api/posts/<post-id>/comments
+###

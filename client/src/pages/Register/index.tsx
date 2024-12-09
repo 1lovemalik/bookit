@@ -1,29 +1,47 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Register() {
+const Register = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-    const handleRegister = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Username:", username, "Email:", email, "Password:", password);
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, email, password }),
+            });
+            if (response.ok) {
+                alert("Registration successful!");
+                navigate("/login");
+            } else {
+                const data = await response.json();
+                alert(data.message || "Registration failed");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
     };
 
     return (
-        <div>
-            <h1>Register</h1>
-            <form onSubmit={handleRegister}>
+        <div className="container mt-5">
+            <h2>Register</h2>
+            <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="username" className="form-label">
                         Username
                     </label>
                     <input
                         type="text"
-                        id="username"
                         className="form-control"
+                        id="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="mb-3">
@@ -32,10 +50,11 @@ export default function Register() {
                     </label>
                     <input
                         type="email"
-                        id="email"
                         className="form-control"
+                        id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
                 <div className="mb-3">
@@ -44,10 +63,11 @@ export default function Register() {
                     </label>
                     <input
                         type="password"
-                        id="password"
                         className="form-control"
+                        id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
                 </div>
                 <button type="submit" className="btn btn-primary">
@@ -56,4 +76,6 @@ export default function Register() {
             </form>
         </div>
     );
-}
+};
+
+export default Register;

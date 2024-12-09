@@ -1,6 +1,8 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const User = require("../models/User");
+
 
 const router = express.Router();
 
@@ -29,6 +31,7 @@ router.post("/register", async (req, res) => {
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
     } catch (err) {
+        console.error("Error during Registration", err);
         res.status(500).json({ message: "Error registering user" });
     }
 });
